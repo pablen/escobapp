@@ -20,8 +20,16 @@ Una vez visitada la aplicación, la misma puede ser utilizada incluso sin conect
 
 ## Instalación y correr en modo desarrollo
 
+El proyecto requiere Node.js 16.20.2 (ver `.nvmrc`). Con `nvm`:
+
 ```
-$ npm i
+$ nvm use
+```
+
+Instalar las dependencias y levantar la aplicación:
+
+```
+$ npm ci
 $ npm start
 ```
 
@@ -33,20 +41,18 @@ $ npm run test
 
 ## Correr tests end-to-end
 
-1. Primero hay que tener corriendo la aplicación:
+La suite inicia la aplicación y ejecuta Cypress automáticamente:
 
 ```
-$ npm run start
+$ npm run test:e2e
 ```
 
-2. Verificar que la URL en donde está disponible la aplicación coincida con el valor de `baseUrl` definido en el archivo `cypress.json`.
-3. Ejecutar Cypress.
+Para correr Cypress de manera interactiva, primero iniciar la aplicación en otra terminal y verificar que la URL coincida con `baseUrl` en `cypress.json`:
 
 ```
+$ npm start
 $ npm run cypress
 ```
-
-4. Ejecutar los tests haciendo clic en el botón _Run all specs_.
 
 ## LICENCIA
 

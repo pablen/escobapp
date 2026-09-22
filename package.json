@@ -2,6 +2,9 @@
   "name": "escobapp",
   "version": "1.9.0",
   "private": true,
+  "engines": {
+    "node": "16.x"
+  },
   "dependencies": {
     "@reach/dialog": "0.10.3",
     "@testing-library/jest-dom": "4.2.4",
@@ -28,7 +31,7 @@
     "test": "react-scripts test",
     "cypress": "cypress open",
     "cypress:headless": "cypress run",
-    "test:e2e": "BROWSER=none run-p --race start cypress:headless",
+    "test:e2e": "CI=true run-p --race start cypress:headless",
     "eject": "react-scripts eject"
   },
   "browserslist": {

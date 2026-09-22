@@ -25,11 +25,11 @@ function getRoomConfig(roomId: string): Promise<ConfigOptions> {
     })
 }
 
-interface QueryStringParams extends Partial<ConfigOptions> {
+export interface QueryStringParams extends Partial<ConfigOptions> {
   preset?: PresetName
 }
 
-function getLocalConfig(params: QueryStringParams): ConfigOptions {
+export function getLocalConfig(params: QueryStringParams): ConfigOptions {
   const baseConfig =
     typeof params.preset === 'string' && presets[params.preset]
       ? presets[params.preset].options
