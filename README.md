@@ -14,6 +14,23 @@ El juego es adaptable para distintos usos didácticos y permite configurar los s
 - Pausar cuando juega la máquina o no.
 - Tiempo de espera antes de dar una pista de una posible jugada (o desactivar pistas por completo).
 
+### Fracciones
+
+Además de enteros positivos, el valor objetivo y las cartas del mazo pueden ser
+fracciones positivas, por ejemplo `1/2`, `2/3` o `3/4`. Se pueden combinar
+enteros y fracciones en el mismo mazo. La carta conserva la forma ingresada:
+`2/4` se muestra como `2/4`, aunque en el juego equivale a `1/2`.
+
+El preset **Sumar 1** ofrece un mazo inicial de fracciones. También puede
+abrirse directamente con `?preset=sumar1`.
+
+Para configurar desde la URL, usar `targetValue` y `availableCards`. Las
+fracciones admiten `/` o `|`; se recomienda `|` para compartir enlaces:
+
+```
+?targetValue=1&availableCards=1|2,1|3,1|6
+```
+
 ## Modo Offline
 
 Una vez visitada la aplicación, la misma puede ser utilizada incluso sin conectividad a internet.

@@ -1,5 +1,5 @@
 import { AnimateSharedLayout } from 'framer-motion'
-import PropTypes from 'prop-types'
+/* eslint-disable react/prop-types */
 import React from 'react'
 
 import { ConfigOptions } from './presets'
@@ -9,10 +9,10 @@ import RulesDialog from './components/RulesDialog'
 import * as config from './config'
 import ConfigForm from './components/ConfigForm'
 import ScoreBoard from './components/ScoreBoard'
-import * as utils from './utils'
 import styles from './Game.module.css'
 import Card from './components/Card'
 import Btn from './components/Btn'
+import { format } from './fractions'
 
 const Game: React.FC<Props> = ({
   initialIsPlayerTurn,
@@ -116,7 +116,9 @@ const Game: React.FC<Props> = ({
     ) : state.selectedAiCard === null ? (
       'Esperando a que juegue la máquina...'
     ) : state.selectedTableCards.length === 0 ? (
-      `La máquina se descarta un ${state.shuffledStack[state.selectedAiCard]}`
+      `La máquina se descarta un ${format(
+        state.shuffledStack[state.selectedAiCard]
+      )}`
     ) : (
       <>
         La máquina juega{' '}
@@ -124,8 +126,10 @@ const Game: React.FC<Props> = ({
           {[
             state.shuffledStack[state.selectedAiCard],
             ...state.selectedTableCards.map((i) => state.shuffledStack[i]),
-          ].join(' + ')}{' '}
-          = {state.config.targetValue}
+          ]
+            .map(format)
+            .join(' + ')}{' '}
+          = {format(state.config.targetValue)}
         </span>
       </>
     )
@@ -359,15 +363,13 @@ const Game: React.FC<Props> = ({
   )
 }
 
-const GamePropTypes = {
-  initialIsPlayerTurn: PropTypes.bool.isRequired,
-  initialConfig: utils.configPropTypes.isRequired,
-  showRules: PropTypes.bool.isRequired,
-  shuffle: PropTypes.func.isRequired,
+type Props = {
+  initialIsPlayerTurn: boolean
+  initialConfig: ConfigOptions
+  showRules: boolean
+  shuffle: (
+    cards: ConfigOptions['availableCards']
+  ) => ConfigOptions['availableCards']
 }
-
-Game.propTypes = GamePropTypes
-
-type Props = PropTypes.InferProps<typeof GamePropTypes>
 
 export default Game

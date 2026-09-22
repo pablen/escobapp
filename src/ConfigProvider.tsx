@@ -7,6 +7,7 @@ import presets, { ConfigOptions, PresetName } from './presets'
 import { roomsApiUrlPattern, defaultConfig } from './config'
 import { getRandomTurn } from './utils'
 import Game from './Game'
+import { compare, FractionValue, parseFraction } from './fractions'
 
 function getRoomConfig(roomId: string): Promise<ConfigOptions> {
   return fetch(roomsApiUrlPattern.replace('{roomId}', roomId))
@@ -25,8 +26,15 @@ function getRoomConfig(roomId: string): Promise<ConfigOptions> {
     })
 }
 
-export interface QueryStringParams extends Partial<ConfigOptions> {
+export interface QueryStringParams {
   preset?: PresetName
+  targetValue?: unknown
+  availableCards?: unknown
+  playerCardsAmount?: unknown
+  tableCardsAmount?: unknown
+  cardType?: unknown
+  pauseOnAiPlay?: unknown
+  hintsDelay?: unknown
 }
 
 export function getLocalConfig(params: QueryStringParams): ConfigOptions {
@@ -45,15 +53,16 @@ export function getLocalConfig(params: QueryStringParams): ConfigOptions {
       ? params.tableCardsAmount
       : baseConfig.tableCardsAmount
 
-  const targetValue =
-    typeof params.targetValue === 'number' && params.targetValue > 2
-      ? params.targetValue
-      : baseConfig.targetValue
+  const parsedTargetValue = parseFraction(params.targetValue)
+  const targetValue = parsedTargetValue || baseConfig.targetValue
 
   const availableCards = Array.isArray(params.availableCards)
-    ? params.availableCards.filter(
-        (v) => typeof v === 'number' && v > 0 && v < targetValue
-      )
+    ? params.availableCards
+        .map(parseFraction)
+        .filter(
+          (value): value is FractionValue =>
+            value !== null && compare(value, targetValue) < 0
+        )
     : baseConfig.availableCards
 
   const isValidStack =
@@ -69,7 +78,8 @@ export function getLocalConfig(params: QueryStringParams): ConfigOptions {
       : baseConfig.tableCardsAmount,
     availableCards: isValidStack ? availableCards : baseConfig.availableCards,
     cardType:
-      params.cardType && ['image', 'number'].includes(params.cardType)
+      typeof params.cardType === 'string' &&
+      (params.cardType === 'image' || params.cardType === 'number')
         ? params.cardType
         : baseConfig.cardType,
     pauseOnAiPlay:
@@ -111,7 +121,7 @@ const ConfigProvider: React.FC = () => {
   }, [])
 
   const handleShuffle = useCallback(
-    (arr: number[]) =>
+    (arr: ConfigOptions['availableCards']) =>
       process.env.NODE_ENV === 'development' && parsedQs.noShuffle
         ? arr
         : arrayShuffle(arr),

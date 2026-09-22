@@ -6,7 +6,7 @@ describe('Game configuration', () => {
   })
 
   it('loads a preset and restarts the game with its card design', () => {
-    cy.contains('Sumar 100').click()
+    cy.get('[data-preset-id="del100"]').click()
     cy.contains('Guardar').click()
 
     cy.get('[data-testid="playerCards"] [data-testid^="card-"]').should(

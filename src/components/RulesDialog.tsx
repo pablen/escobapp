@@ -1,11 +1,12 @@
 import React, { useState, useCallback } from 'react'
+/* eslint-disable react/prop-types */
 import { Dialog } from '@reach/dialog'
-import PropTypes from 'prop-types'
 
-import { configPropTypes } from '../utils'
 import Checkbox from './Checkbox'
 import styles from './RulesDialog.module.css'
 import Btn from './Btn'
+import { format } from '../fractions'
+import { ConfigOptions } from '../presets'
 
 const RulesDialog: React.FC<Props> = ({ onClose, currentConfig }) => {
   const [doNotShowAgain, setDoNotShowAgain] = useState(false)
@@ -30,7 +31,8 @@ const RulesDialog: React.FC<Props> = ({ onClose, currentConfig }) => {
 
         <p>
           Intentar reunir la mayor cantidad de cartas de la mesa con una de las
-          propias que sumen <strong>{currentConfig.targetValue} puntos</strong>.
+          propias que sumen{' '}
+          <strong>{format(currentConfig.targetValue)} puntos</strong>.
         </p>
         <p>
           Si no se puede jugar se debe <strong>descartar</strong>.
@@ -62,13 +64,6 @@ const RulesDialog: React.FC<Props> = ({ onClose, currentConfig }) => {
   )
 }
 
-const RulesDialogPropTypes = {
-  currentConfig: configPropTypes.isRequired,
-  onClose: PropTypes.func.isRequired,
-}
-
-RulesDialog.propTypes = RulesDialogPropTypes
-
-type Props = PropTypes.InferProps<typeof RulesDialogPropTypes>
+type Props = { currentConfig: ConfigOptions; onClose: () => void }
 
 export default RulesDialog

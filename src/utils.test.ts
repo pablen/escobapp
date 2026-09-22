@@ -37,4 +37,21 @@ describe('Function getBestPlay', () => {
       utils.getBestPlay(playerCards, tableCards, stack, targetValue)
     ).toEqual([4, 1, 2, 3])
   })
+
+  test('matches equivalent fractions and discards the greatest fraction', () => {
+    const stack = [
+      { numerator: 2, denominator: 4 },
+      { numerator: 1, denominator: 3 },
+      { numerator: 1, denominator: 2 },
+      { numerator: 1, denominator: 6 },
+      { numerator: 3, denominator: 4 },
+    ]
+
+    expect(
+      utils.getBestPlay([0, 4], [1, 3], stack, { numerator: 1, denominator: 1 })
+    ).toEqual([0, 1, 3])
+    expect(
+      utils.getBestPlay([0, 4], [], stack, { numerator: 1, denominator: 1 })
+    ).toEqual([4])
+  })
 })

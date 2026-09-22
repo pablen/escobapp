@@ -19,9 +19,11 @@ function renderForm() {
 }
 
 test('loads a preset and submits its options', () => {
-  const { baseElement, getByText, onClose, onSubmit } = renderForm()
+  const { baseElement, onClose, onSubmit } = renderForm()
 
-  fireEvent.click(getByText('Sumar 100'))
+  fireEvent.click(
+    baseElement.querySelector('[data-preset-id="del100"]') as Element
+  )
   fireEvent.submit(baseElement.querySelector('form') as HTMLFormElement)
 
   expect(onClose).toHaveBeenCalledTimes(1)
@@ -63,4 +65,32 @@ test('closes without submitting when cancelled', () => {
 
   expect(onClose).toHaveBeenCalledTimes(1)
   expect(onSubmit).not.toHaveBeenCalled()
+})
+
+test('accepts mixed integer and fraction card values', () => {
+  const { baseElement, getByLabelText, onSubmit } = renderForm()
+
+  fireEvent.change(getByLabelText('Escoba del'), { target: { value: '2' } })
+  fireEvent.change(getByLabelText('Cantidad de cartas por jugador'), {
+    target: { value: '1', valueAsNumber: 1 },
+  })
+  fireEvent.change(getByLabelText('Cantidad de cartas en la mesa'), {
+    target: { value: '1', valueAsNumber: 1 },
+  })
+  fireEvent.change(getByLabelText('Cartas del mazo'), {
+    target: { value: '1, 1/2, 2/4, 1|3' },
+  })
+  fireEvent.submit(baseElement.querySelector('form') as HTMLFormElement)
+
+  expect(onSubmit).toHaveBeenCalledWith(
+    expect.objectContaining({
+      targetValue: { numerator: 2, denominator: 1 },
+      availableCards: [
+        { numerator: 1, denominator: 1 },
+        { numerator: 1, denominator: 2 },
+        { numerator: 2, denominator: 4 },
+        { numerator: 1, denominator: 3 },
+      ],
+    })
+  )
 })

@@ -28,3 +28,16 @@ test('calls onClick with its card id when interactive', () => {
 
   expect(onClick).toHaveBeenCalledWith(5)
 })
+
+test('renders fractions with a numerator, bar and denominator', () => {
+  const { container } = render(
+    <Card id={1} type="image" value={{ numerator: 2, denominator: 4 }} />
+  )
+
+  expect(container.querySelector('[data-cardtype="fraction"]')).toBeTruthy()
+  expect(
+    container.querySelector('[data-cardtype="fraction"]')?.getAttribute('class')
+  ).toBeTruthy()
+  expect(container.querySelectorAll('text')).toHaveLength(2)
+  expect(container.querySelector('line')).toBeTruthy()
+})

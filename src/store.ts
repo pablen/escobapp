@@ -1,6 +1,7 @@
 import { getBestPlay, CardIndex } from './utils'
 import { isDebugEnabled } from './config'
 import { ConfigOptions } from './presets'
+import { compare, equals, format, isValidFractionInput, sum } from './fractions'
 
 export type State = {
   config: ConfigOptions
@@ -167,16 +168,22 @@ export function reducer(state: State, action: Action): State {
       if (typeof state.selectedPlayerCard !== 'number') {
         throw new Error('Cannot execute play. No player card selected.')
       }
-      const isValidPlay =
-        state.selectedTableCards.reduce(
-          (acc, current) => acc + state.shuffledStack[current],
-          state.shuffledStack[state.selectedPlayerCard]
-        ) === state.config.targetValue
+      const isValidPlay = equals(
+        sum([
+          state.shuffledStack[state.selectedPlayerCard],
+          ...state.selectedTableCards.map(
+            (current) => state.shuffledStack[current]
+          ),
+        ]),
+        state.config.targetValue
+      )
 
       if (!isValidPlay) {
         return {
           ...state,
-          userMessage: `Las cartas elegidas no suman ${state.config.targetValue}!`,
+          userMessage: `Las cartas elegidas no suman ${format(
+            state.config.targetValue
+          )}!`,
         }
       }
 
@@ -283,6 +290,9 @@ function range(start: number, amount: number): number[] {
 }
 
 function checkValidConfig(cfg: State['config']): void {
+  if (!isValidFractionInput(cfg.targetValue)) {
+    throw new Error('Target value must be a positive fraction')
+  }
   if (
     cfg.tableCardsAmount + 2 * cfg.playerCardsAmount >
     cfg.availableCards.length
@@ -290,13 +300,16 @@ function checkValidConfig(cfg: State['config']): void {
     throw new Error('Insufficient cards in deck')
   }
   const invalidValues = cfg.availableCards.filter(
-    (value) => value >= cfg.targetValue
+    (value) =>
+      !isValidFractionInput(value) || compare(value, cfg.targetValue) >= 0
   )
   if (invalidValues.length > 0) {
     throw new Error(
-      `Some values in the deck (${invalidValues.join(
-        ', '
-      )}) are greater or equal than the target value (${cfg.targetValue})`
+      `Some values in the deck (${invalidValues
+        .map(format)
+        .join(', ')}) are greater or equal than the target value (${format(
+        cfg.targetValue
+      )})`
     )
   }
 }

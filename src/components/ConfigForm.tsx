@@ -1,14 +1,14 @@
 import React, { useCallback, useState } from 'react'
+/* eslint-disable react/prop-types */
 import { Dialog } from '@reach/dialog'
-import PropTypes from 'prop-types'
 
-import { configPropTypes } from '../utils'
 import Input, { Label } from './Input'
 import Checkbox from './Checkbox'
-import presets, { PresetName } from '../presets'
+import presets, { ConfigOptions, PresetName } from '../presets'
 import styles from './ConfigForm.module.css'
 import Card from './Card'
 import Btn from './Btn'
+import { compare, format, parseFraction } from '../fractions'
 
 const ConfigForm: React.FC<Props> = ({ onClose, onSubmit, currentConfig }) => {
   const [message, setMessage] = useState<string | null>(null)
@@ -26,11 +26,11 @@ const ConfigForm: React.FC<Props> = ({ onClose, onSubmit, currentConfig }) => {
   )
 
   const [availableCards, setAvailableCards] = useState(
-    currentConfig.availableCards.join(', ')
+    currentConfig.availableCards.map(format).join(', ')
   )
 
-  const [targetValue, setTargetValue] = useState<number | undefined>(
-    currentConfig.targetValue
+  const [targetValue, setTargetValue] = useState(
+    format(currentConfig.targetValue)
   )
 
   const [cardType, setCardType] = useState(currentConfig.cardType)
@@ -52,9 +52,9 @@ const ConfigForm: React.FC<Props> = ({ onClose, onSubmit, currentConfig }) => {
       ]
       setPlayerCardsAmount(options.playerCardsAmount)
       setTableCardsAmount(options.tableCardsAmount)
-      setAvailableCards(options.availableCards.join(', '))
+      setAvailableCards(options.availableCards.map(format).join(', '))
       setPauseOnAiPlay(options.pauseOnAiPlay)
-      setTargetValue(options.targetValue)
+      setTargetValue(format(options.targetValue))
       setHintsDelay(options.hintsDelay)
       setCardType(options.cardType)
     },
@@ -64,10 +64,16 @@ const ConfigForm: React.FC<Props> = ({ onClose, onSubmit, currentConfig }) => {
   const handleSubmit = useCallback(
     (ev) => {
       ev.preventDefault()
-      const parsedAvailableCards = availableCards
+      const parsedValues = availableCards
         .split(',')
-        .map((v) => parseInt(v, 10))
-        .filter((v) => v && v >= 0)
+        .map((value) => parseFraction(value))
+      const parsedAvailableCards = parsedValues.filter(
+        (value): value is NonNullable<typeof value> => value !== null
+      )
+      if (parsedAvailableCards.length !== parsedValues.length) {
+        setMessage('Cada carta debe ser un entero positivo o una fracción a/b')
+        return
+      }
       if (tableCardsAmount === undefined) {
         setMessage('La cantidad de cartas en la mesa es requerida')
         return
@@ -83,11 +89,16 @@ const ConfigForm: React.FC<Props> = ({ onClose, onSubmit, currentConfig }) => {
         setMessage('Se necesitan más cartas en el mazo')
         return
       }
-      if (targetValue === undefined) {
-        setMessage('El valor de la Escoba es requerido')
+      const parsedTargetValue = parseFraction(targetValue)
+      if (!parsedTargetValue) {
+        setMessage(
+          'El valor de la Escoba debe ser un entero o fracción positiva'
+        )
         return
       }
-      if (parsedAvailableCards.some((v) => v >= targetValue)) {
+      if (
+        parsedAvailableCards.some((v) => compare(v, parsedTargetValue) >= 0)
+      ) {
         setMessage(
           'El mazo no debe contener cartas de valor mayor o igual al de la Escoba'
         )
@@ -100,7 +111,7 @@ const ConfigForm: React.FC<Props> = ({ onClose, onSubmit, currentConfig }) => {
         tableCardsAmount,
         availableCards: parsedAvailableCards,
         pauseOnAiPlay,
-        targetValue,
+        targetValue: parsedTargetValue,
         hintsDelay: useHints ? hintsDelay : 0,
         cardType,
       })
@@ -150,7 +161,9 @@ const ConfigForm: React.FC<Props> = ({ onClose, onSubmit, currentConfig }) => {
                   small
                   key={`preset-${id}`}
                 >
-                  {presets[id].label}
+                  {presets[id].label.replace(/ (\d+)$/, '')}
+                  <br />
+                  {presets[id].label.match(/\d+$/)?.[0]}
                 </Btn>
               ))}
             </div>
@@ -160,8 +173,7 @@ const ConfigForm: React.FC<Props> = ({ onClose, onSubmit, currentConfig }) => {
               onChange={setTargetValue}
               required
               value={targetValue}
-              type="number"
-              min="2"
+              type="text"
               id="targetValue"
               mt="1.25em"
             />
@@ -196,7 +208,7 @@ const ConfigForm: React.FC<Props> = ({ onClose, onSubmit, currentConfig }) => {
               required
               type="text"
               value={availableCards}
-              rows={2}
+              rows={3}
               id="availableCards"
               mb="1.5em"
             />
@@ -286,14 +298,10 @@ const ConfigForm: React.FC<Props> = ({ onClose, onSubmit, currentConfig }) => {
   )
 }
 
-const ConfigFormPropTypes = {
-  currentConfig: configPropTypes.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
+type Props = {
+  currentConfig: ConfigOptions
+  onSubmit: (config: ConfigOptions) => void
+  onClose: () => void
 }
-
-ConfigForm.propTypes = ConfigFormPropTypes
-
-type Props = PropTypes.InferProps<typeof ConfigFormPropTypes>
 
 export default ConfigForm

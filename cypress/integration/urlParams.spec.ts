@@ -7,6 +7,21 @@ describe('URL parameters', () => {
       cy.contains('sumen 100 puntos')
     })
 
+    it('starts the sumar1 preset with fractional cards dealt to both players and table', () => {
+      cy.visit('/?noShuffle=1&isPlayerTurn=1&preset=sumar1')
+      cy.contains('sumen 1 puntos')
+      cy.contains('¡EMPEZAR!').click()
+      cy.get('[data-testid=playerCards] > [data-testid^=card-]').should(
+        'have.length',
+        3
+      )
+      cy.get('[data-testid=tableCards] > [data-testid^=card-]').should(
+        'have.length',
+        4
+      )
+      cy.get('[data-cardtype="fraction"]').should('have.length.greaterThan', 0)
+    })
+
     it('is ignored if invalid', () => {
       cy.visit('/?noShuffle=1&isPlayerTurn=1&preset=foobar')
       cy.contains('sumen 10 puntos')
@@ -198,6 +213,20 @@ describe('URL parameters', () => {
       cy.contains('¡EMPEZAR!').click()
       cy.contains('Tu Turno')
       cy.get('[data-testid^=card-]').should('have.length', 23)
+    })
+
+    it('accepts slash and pipe fraction separators', () => {
+      cy.visit(
+        '/?noShuffle=1&isPlayerTurn=1&playerCardsAmount=1&tableCardsAmount=1&targetValue=1&availableCards=1/2,1/3,1/6,2/4'
+      )
+      cy.contains('¡EMPEZAR!').click()
+      cy.get('[data-cardtype="fraction"]').should('have.length', 3)
+
+      cy.visit(
+        '/?noShuffle=1&isPlayerTurn=1&playerCardsAmount=1&tableCardsAmount=1&targetValue=1&availableCards=1|2,1|3,1|6,2|4'
+      )
+      cy.contains('¡EMPEZAR!').click()
+      cy.get('[data-cardtype="fraction"]').should('have.length', 3)
     })
   })
 })

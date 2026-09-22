@@ -58,4 +58,21 @@ describe('Play button', () => {
     cy.get('[data-testid="playerCards"] [data-testid="card-0"]').should('exist')
     cy.contains('Las cartas elegidas no suman 10!')
   })
+
+  it('plays equivalent fractions exactly', () => {
+    cy.visit(
+      '/?noShuffle=1&isPlayerTurn=1&playerCardsAmount=1&tableCardsAmount=2&targetValue=1&availableCards=2/4,1/2,1/3,1/6'
+    )
+    cy.contains('¡EMPEZAR!').click()
+    cy.get('[data-testid="card-0"]').click()
+    cy.get('[data-testid="card-2"]').click()
+    cy.get('[data-testid="card-3"]').click()
+    cy.get('[data-testid="play-btn"]').contains('Jugar').click()
+    cy.get('[data-testid="playerCards"] [data-testid="card-0"]').should(
+      'not.exist'
+    )
+    cy.get('[data-testid="tableCards"] [data-testid="card-2"]').should(
+      'not.exist'
+    )
+  })
 })
