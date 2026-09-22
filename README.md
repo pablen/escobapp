@@ -37,10 +37,10 @@ Una vez visitada la aplicación, la misma puede ser utilizada incluso sin conect
 
 ## Instalación y correr en modo desarrollo
 
-El proyecto requiere Node.js 16.20.2 (ver `.nvmrc`). Con `nvm`:
+El proyecto requiere Node.js 24 (ver `.node-version`). Con `fnm`:
 
 ```
-$ nvm use
+$ fnm use
 ```
 
 Instalar las dependencias y levantar la aplicación:

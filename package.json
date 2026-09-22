@@ -3,7 +3,7 @@
   "version": "1.9.0",
   "private": true,
   "engines": {
-    "node": "16.x"
+    "node": "24.x"
   },
   "dependencies": {
     "@reach/dialog": "0.10.3",
@@ -27,7 +27,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider react-scripts build",
     "test": "react-scripts test",
     "cypress": "cypress open",
     "cypress:headless": "cypress run",
