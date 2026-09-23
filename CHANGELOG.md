@@ -1,5 +1,30 @@
 # Registro de cambios
 
+## `v2.0.0` — 2026-09-22
+
+### Agregado
+
+- Soporte para cartas con fracciones y comparación exacta de valores fraccionarios.
+- Nuevo preset `sumar1`, con cartas fraccionarias que suman uno.
+- Cobertura de tests con Vitest y provider V8, incluyendo reportes HTML y LCOV.
+
+### Modernizado
+
+- Migración de React 16 y Create React App a React 19 y Vite.
+- Actualización de TypeScript, Testing Library, Cypress, ESLint, Prettier, Framer Motion y demás dependencias.
+- Migración de los diálogos a Radix UI.
+- Migración del gestor de paquetes de npm a pnpm mediante Corepack.
+- Migración del service worker de CRA a Vite PWA, conservando la URL `/service-worker.js` para actualizar instalaciones offline existentes.
+- CI, hooks de Git y scripts de desarrollo actualizados para Node.js 24 y pnpm.
+
+### Calidad y configuración
+
+- Validación de configuración separada de la UI y normalización de valores inválidos de pistas.
+- Configuración, estado de partida y parámetros de URL adaptados para trabajar con valores fraccionarios.
+- Umbrales conservadores de cobertura incorporados al CI.
+- Verificación automática de los artefactos PWA generados durante el build.
+- Documentación de instalación, variables de entorno y comandos actualizada.
+
 ## `v1.9.0`
 
 - Se añadió splash screen cuando la app corre en modo PWA en iOS
