@@ -2,6 +2,8 @@
 
 # dependencies
 /node_modules
+.claude/settings.local.json
+tsconfig.tsbuildinfo
 /.pnp
 .pnp.js
 

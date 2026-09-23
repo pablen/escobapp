@@ -1,0 +1,22 @@
+{
+  "npm.packageManager": "pnpm",
+  "search.exclude": {
+    "pnpm-lock.yaml": true
+  },
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "editor.rulers": [80],
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "eslint.useFlatConfig": true,
+  "prettier.enable": true,
+  "prettier.requireConfig": true,
+  "js/ts.tsdk.path": "node_modules/typescript/lib"
+}

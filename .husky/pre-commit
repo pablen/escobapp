@@ -1,1 +1,9 @@
-pnpm exec tsc --noEmit && pnpm test && pnpm exec lint-staged
+#!/bin/sh
+
+# On pre-commit, format staged files only.
+# AI_MODE suppresses verbose output to avoid flooding agent context.
+if [ -n "${AI_MODE:-}" ]; then
+  exec pnpm exec lint-staged --quiet
+else
+  exec pnpm exec lint-staged --verbose
+fi

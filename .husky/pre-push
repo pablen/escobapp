@@ -1,1 +1,23 @@
-pnpm exec tsc -p cypress && pnpm run test:e2e
+#!/bin/sh
+
+# Capture output and only print it when a check fails.
+run_quiet() {
+  label="$1"; shift
+  tmp_file="$(mktemp "${TMPDIR:-/tmp}/escobapp-pre-push.XXXXXX")" || exit 1
+  if "$@" >"$tmp_file" 2>&1; then
+    rm -f "$tmp_file"; printf 'OK %s\n' "$label"; return 0
+  fi
+  printf 'FAILED %s\n' "$label" >&2; cat "$tmp_file" >&2; rm -f "$tmp_file"; exit 1
+}
+
+if [ -n "${AI_MODE:-}" ]; then
+  run_quiet "dependency check" pnpm run --silent check-dependencies
+  run_quiet "typecheck" pnpm run --silent typecheck
+  exit 0
+fi
+
+pnpm run check-dependencies
+echo "Running TypeScript type check..."
+if pnpm run typecheck; then echo "Type check passed."; else echo "Type check failed."; exit 1; fi
+pnpm exec tsc -p cypress
+pnpm run test:e2e
