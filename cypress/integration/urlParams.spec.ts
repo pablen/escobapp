@@ -13,11 +13,11 @@ describe('URL parameters', () => {
       cy.contains('¡EMPEZAR!').click()
       cy.get('[data-testid=playerCards] > [data-testid^=card-]').should(
         'have.length',
-        3
+        3,
       )
       cy.get('[data-testid=tableCards] > [data-testid^=card-]').should(
         'have.length',
-        4
+        4,
       )
       cy.get('[data-cardtype="fraction"]').should('have.length.greaterThan', 0)
     })
@@ -34,7 +34,7 @@ describe('URL parameters', () => {
       cy.contains('¡EMPEZAR!').click()
       cy.get('[data-testid=tableCards] > [data-testid^=card-]').should(
         'have.length',
-        5
+        5,
       )
     })
 
@@ -43,7 +43,7 @@ describe('URL parameters', () => {
       cy.contains('¡EMPEZAR!').click()
       cy.get('[data-testid=tableCards] > [data-testid^=card-]').should(
         'have.length',
-        4
+        4,
       )
     })
   })
@@ -54,11 +54,11 @@ describe('URL parameters', () => {
       cy.contains('¡EMPEZAR!').click()
       cy.get('[data-testid=aiCards] > [data-testid^=card-]').should(
         'have.length',
-        2
+        2,
       )
       cy.get('[data-testid=playerCards] > [data-testid^=card-]').should(
         'have.length',
-        2
+        2,
       )
     })
 
@@ -67,11 +67,11 @@ describe('URL parameters', () => {
       cy.contains('¡EMPEZAR!').click()
       cy.get('[data-testid=aiCards] > [data-testid^=card-]').should(
         'have.length',
-        3
+        3,
       )
       cy.get('[data-testid=playerCards] > [data-testid^=card-]').should(
         'have.length',
-        3
+        3,
       )
     })
   })
@@ -124,9 +124,9 @@ describe('URL parameters', () => {
       cy.visit('/?noShuffle=1&isPlayerTurn=0&pauseOnAiPlay=false')
       cy.contains('¡EMPEZAR!').click()
       cy.contains('Esperando a que juegue la máquina...')
-      cy.tick(800)
+      cy.tick(600)
       cy.contains('La máquina juega')
-      cy.clock().then((c) => c.restore())
+      cy.tick(2 * 600)
       cy.contains('Tu Turno')
     })
 
@@ -173,7 +173,7 @@ describe('URL parameters', () => {
     it('is ignored if invalid', () => {
       cy.clock()
       cy.visit(
-        '/?noShuffle=1&isPlayerTurn=1&playerCardsAmount=4&hintsDelay=foobar'
+        '/?noShuffle=1&isPlayerTurn=1&playerCardsAmount=4&hintsDelay=foobar',
       )
       cy.contains('¡EMPEZAR!').click()
       cy.contains('Tu Turno')
@@ -193,7 +193,7 @@ describe('URL parameters', () => {
   describe('"availableCards"', () => {
     it('defines the cards deck to use for the game if valid', () => {
       cy.visit(
-        '/?noShuffle=1&isPlayerTurn=1&playerCardsAmount=1&tableCardsAmount=1&availableCards=1,2,3'
+        '/?noShuffle=1&isPlayerTurn=1&playerCardsAmount=1&tableCardsAmount=1&availableCards=1,2,3',
       )
       cy.contains('¡EMPEZAR!').click()
       cy.contains('Tu Turno')
@@ -208,7 +208,7 @@ describe('URL parameters', () => {
 
     it('is ignored if invalid', () => {
       cy.visit(
-        '/?noShuffle=1&isPlayerTurn=1&playerCardsAmount=1&tableCardsAmount=1&availableCards=foobar'
+        '/?noShuffle=1&isPlayerTurn=1&playerCardsAmount=1&tableCardsAmount=1&availableCards=foobar',
       )
       cy.contains('¡EMPEZAR!').click()
       cy.contains('Tu Turno')
@@ -217,16 +217,18 @@ describe('URL parameters', () => {
 
     it('accepts slash and pipe fraction separators', () => {
       cy.visit(
-        '/?noShuffle=1&isPlayerTurn=1&playerCardsAmount=1&tableCardsAmount=1&targetValue=1&availableCards=1/2,1/3,1/6,2/4'
+        '/?noShuffle=1&isPlayerTurn=1&playerCardsAmount=1&tableCardsAmount=1&targetValue=1&availableCards=1/2,1/3,1/6,2/4',
       )
       cy.contains('¡EMPEZAR!').click()
-      cy.get('[data-cardtype="fraction"]').should('have.length', 3)
+      cy.get('[data-testid^=card-]').should('have.length', 3)
+      cy.get('[data-cardtype="fraction"]').should('have.length', 2)
 
       cy.visit(
-        '/?noShuffle=1&isPlayerTurn=1&playerCardsAmount=1&tableCardsAmount=1&targetValue=1&availableCards=1|2,1|3,1|6,2|4'
+        '/?noShuffle=1&isPlayerTurn=1&playerCardsAmount=1&tableCardsAmount=1&targetValue=1&availableCards=1|2,1|3,1|6,2|4',
       )
       cy.contains('¡EMPEZAR!').click()
-      cy.get('[data-cardtype="fraction"]').should('have.length', 3)
+      cy.get('[data-testid^=card-]').should('have.length', 3)
+      cy.get('[data-cardtype="fraction"]').should('have.length', 2)
     })
   })
 })
