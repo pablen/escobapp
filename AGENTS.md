@@ -27,6 +27,8 @@ Add unit tests next to the code they cover, using React Testing Library and Vite
 
 Use concise Conventional Commit-style subjects, such as `feat(fracciones): add implementation plan`, `test: strengthen e2e coverage`, or `chore: update pnpm-lock.yaml`. Pull requests should explain the user-visible or technical change, link the relevant issue or plan when applicable, and include screenshots or recordings for UI changes. Confirm build, unit tests, and end-to-end tests pass before requesting review.
 
+When adding or modifying functionality, suggest the appropriate semver bump and update `CHANGELOG.md` for the next release. When preparing that release, apply the bump in `package.json` and include the changelog entry before considering the work complete.
+
 ## Configuration and Security
 
 Do not commit secrets or generated dependency/build artifacts. Keep dependency changes synchronized with `pnpm-lock.yaml`, and document user-facing configuration or game-rule changes in `README.md` or `docs/` when appropriate.
