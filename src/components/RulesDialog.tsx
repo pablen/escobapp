@@ -36,7 +36,7 @@ const RulesDialog: React.FC<Props> = ({ onClose, currentConfig }) => {
             <p>
               Intentar reunir la mayor cantidad de cartas de la mesa con una de
               las propias que sumen{' '}
-              <strong>{format(currentConfig.targetValue)} puntos</strong>.
+              <strong>{format(currentConfig.targetValue)}</strong>.
             </p>
             <p>
               Si no se puede jugar se debe <strong>descartar</strong>.

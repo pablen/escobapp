@@ -2,14 +2,14 @@ describe('URL parameters', () => {
   describe('"preset"', () => {
     it('selects an initial preset config if valid', () => {
       cy.visit('/?noShuffle=1&isPlayerTurn=1&preset=del15')
-      cy.contains('sumen 15 puntos')
+      cy.contains('sumen 15')
       cy.visit('/?noShuffle=1&isPlayerTurn=1&preset=del100')
-      cy.contains('sumen 100 puntos')
+      cy.contains('sumen 100')
     })
 
     it('starts the sumar1 preset with fractional cards dealt to both players and table', () => {
       cy.visit('/?noShuffle=1&isPlayerTurn=1&preset=sumar1')
-      cy.contains('sumen 1 puntos')
+      cy.contains('sumen 1')
       cy.contains('¡EMPEZAR!').click()
       cy.get('[data-testid=playerCards] > [data-testid^=card-]').should(
         'have.length',
@@ -24,7 +24,7 @@ describe('URL parameters', () => {
 
     it('is ignored if invalid', () => {
       cy.visit('/?noShuffle=1&isPlayerTurn=1&preset=foobar')
-      cy.contains('sumen 10 puntos')
+      cy.contains('sumen 10')
     })
   })
 

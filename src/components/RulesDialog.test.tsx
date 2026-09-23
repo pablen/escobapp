@@ -13,7 +13,7 @@ test('explains the configured target and starts the game', () => {
     <RulesDialog currentConfig={presets.del15.options} onClose={onClose} />,
   )
 
-  expect(getByText('15 puntos')).toBeInTheDocument()
+  expect(getByText('15')).toBeInTheDocument()
   fireEvent.click(getByText('¡EMPEZAR!'))
 
   expect(onClose).toHaveBeenCalledTimes(1)
