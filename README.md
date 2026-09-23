@@ -2,88 +2,92 @@
 
 ![Node.js CI](https://github.com/pablen/escobapp/workflows/Node.js%20CI/badge.svg?branch=master)
 
-Un juego de cartas similar a "Escoba del 15" para usar en ámbitos educativos de Matemática.
+Juego de cartas para trabajar Matemática en el aula. La meta es juntar cartas
+de la mesa con una carta propia hasta alcanzar un valor objetivo configurable.
+Se puede jugar con enteros positivos o con fracciones positivas.
 
-El juego es adaptable para distintos usos didácticos y permite configurar los siguientes parámetros.
+## Cómo se juega
 
-- Tipo de carta: con figuras y números o sólo números.
-- Valor a sumar: por defecto el valor a sumar es 10.
-- Cantidad de cartas en la mesa al inicio de la partida.
-- Cantidad de cartas por jugador al inicio de la partida.
-- Cartas que conforman el mazo: Cuáles valores y qué cantidad de cada uno.
-- Pausar cuando juega la máquina o no.
-- Tiempo de espera antes de dar una pista de una posible jugada (o desactivar pistas por completo).
+En cada turno, elegí una carta propia y las cartas de la mesa que, juntas,
+sumen el objetivo. Si no hay una jugada posible, descartá una carta. Levantar
+todas las cartas de la mesa suma una escoba. Al terminar, cada escoba vale un
+punto y quien reunió más cartas gana otro punto.
 
-### Fracciones
+Las reglas aparecen al abrir la aplicación. Desde el botón de configuración
+se puede elegir un preset o armar una partida a medida.
 
-Además de enteros positivos, el valor objetivo y las cartas del mazo pueden ser
-fracciones positivas, por ejemplo `1/2`, `2/3` o `3/4`. Se pueden combinar
-enteros y fracciones en el mismo mazo. La carta conserva la forma ingresada:
-`2/4` se muestra como `2/4`, aunque en el juego equivale a `1/2`.
+## Configuración y presets
 
-El preset **Sumar 1** ofrece un mazo inicial de fracciones. También puede
-abrirse directamente con `?preset=sumar1`.
+Se pueden cambiar el valor objetivo, el mazo, la cantidad inicial de cartas en
+mesa y por jugador, el diseño de las cartas, la pausa durante el turno de la
+máquina y las pistas.
 
-Para configurar desde la URL, usar `targetValue` y `availableCards`. Las
-fracciones admiten `/` o `|`; se recomienda `|` para compartir enlaces:
+Los presets incluidos son **Sumar 10**, **Sumar 15**, **Sumar 100** y
+**Sumar 1**. El último usa un mazo de fracciones.
 
-```
-?targetValue=1&availableCards=1|2,1|3,1|6
-```
+El valor objetivo y las cartas del mazo aceptan enteros y fracciones positivas
+como `1/2`, `2/3` y `3/4`; se pueden mezclar en el mismo mazo. Una carta
+conserva la forma en que fue escrita: `2/4` se muestra como `2/4`, aunque para
+las reglas equivale a `1/2`.
 
-## Modo Offline
+## Configuración por URL
 
-Una vez visitada la aplicación, la misma puede ser utilizada incluso sin conectividad a internet.
+Se puede compartir una configuración inicial mediante `preset`, `targetValue`,
+`availableCards`, `playerCardsAmount`, `tableCardsAmount`, `cardType`,
+`pauseOnAiPlay` y `hintsDelay`.
 
-## Instalación y correr en modo desarrollo
-
-El proyecto requiere Node.js 24 (ver `.node-version`). Con `fnm`:
-
-```
-$ fnm use
-```
-
-Instalar las dependencias y levantar la aplicación:
+Las fracciones aceptan `/` o `|`; para compartir enlaces se recomienda `|`:
 
 ```
-$ corepack enable
-$ pnpm install --frozen-lockfile
-$ pnpm start
+?preset=sumar1
+?targetValue=1&availableCards=1|2,1|3,1|6&playerCardsAmount=3&tableCardsAmount=4&cardType=number
 ```
 
-## Correr tests unitarios
+## Modo offline
+
+La aplicación es una PWA. Después de visitarla, puede usarse sin conexión. Si
+hay una versión nueva, pide confirmación antes de actualizarla.
+
+## Desarrollo
+
+El proyecto requiere Node.js 24 (ver `.node-version`), Corepack y pnpm.
 
 ```
-$ pnpm test
+fnm use
+corepack enable
+pnpm install --frozen-lockfile
+pnpm start
 ```
 
-Para ejecutar los unitarios y generar el reporte de cobertura:
+El servidor de desarrollo queda disponible en `http://127.0.0.1:3000`.
+
+### Verificación
 
 ```
-$ pnpm run test:coverage
+pnpm run build
+pnpm run verify:pwa
+pnpm test
+pnpm run test:coverage
+pnpm run test:e2e
+pnpm exec eslint src cypress --max-warnings=0
 ```
 
-## Correr tests end-to-end
+Para abrir Cypress de forma interactiva, iniciá la aplicación en otra terminal
+y ejecutá `pnpm run cypress`.
 
-La suite inicia la aplicación y ejecuta Cypress automáticamente:
+## Stack
 
-```
-$ pnpm run test:e2e
-```
-
-Para correr Cypress de manera interactiva, primero iniciar la aplicación en otra terminal y verificar que la URL coincida con `baseUrl` en `cypress.config.ts`:
-
-```
-$ pnpm start
-$ pnpm run cypress
-```
+React 19, TypeScript, Vite, Vite PWA/Workbox, pnpm, Vitest, Cypress, Radix UI
+y Framer Motion. El CI verifica dependencias, build, PWA, cobertura y pruebas
+de punta a punta.
 
 ## Variables de entorno
 
 Vite expone al navegador únicamente variables que comienzan con `VITE_`.
-Para configurar una sala de Firebase o habilitar opciones de depuración, usar
-`VITE_FIREBASE_PROJECT_NAME` y `VITE_DEBUG` respectivamente.
+`VITE_DEBUG=true` muestra la configuración inicial en la consola durante el
+desarrollo. No incluir secretos en variables `VITE_*`.
 
-## LICENCIA
+## Documentación y licencia
 
-[MIT](LICENSE)
+- [Registro de cambios](CHANGELOG.md)
+- [MIT](LICENSE)
