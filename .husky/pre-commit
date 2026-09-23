@@ -1,7 +1,7 @@
 #!/bin/sh
 
-# On pre-commit, format staged files only.
-# AI_MODE suppresses verbose output to avoid flooding agent context.
+# On pre-commit, run the shell tasks configured in lint-staged only against staged files.
+# AI runs use non-verbose mode to avoid flooding the context with successful task output.
 if [ -n "${AI_MODE:-}" ]; then
   exec pnpm exec lint-staged --quiet
 else
