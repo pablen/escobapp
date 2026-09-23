@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import FireStoreParser from 'firestore-parser'
-import arrayShuffle from 'array-shuffle'
-import { parse } from 'query-string'
+import { arrayToShuffled } from 'array-shuffle'
+import queryString from 'query-string'
 
 import presets, { ConfigOptions, PresetName } from './presets'
 import { roomsApiUrlPattern, defaultConfig } from './config'
@@ -15,12 +15,12 @@ function getRoomConfig(roomId: string): Promise<ConfigOptions> {
     .then(
       (json) =>
         FireStoreParser<{ fields: { config: ConfigOptions } }>(json).fields
-          .config
+          .config,
     )
     .then((roomConfig) => {
       console.log(
         `Fetched remote configuration for room "${roomId}"`,
-        roomConfig
+        roomConfig,
       )
       return roomConfig
     })
@@ -61,7 +61,7 @@ export function getLocalConfig(params: QueryStringParams): ConfigOptions {
         .map(parseFraction)
         .filter(
           (value): value is FractionValue =>
-            value !== null && compare(value, targetValue) < 0
+            value !== null && compare(value, targetValue) < 0,
         )
     : baseConfig.availableCards
 
@@ -88,12 +88,12 @@ export function getLocalConfig(params: QueryStringParams): ConfigOptions {
         : baseConfig.pauseOnAiPlay,
     hintsDelay:
       typeof params.hintsDelay === 'number'
-        ? params.hintsDelay
+        ? Math.max(0, params.hintsDelay)
         : baseConfig.hintsDelay,
   }
 }
 
-const parsedQs = parse(window.location.search, {
+const parsedQs = queryString.parse(window.location.search, {
   parseBooleans: true,
   parseNumbers: true,
   arrayFormat: 'comma',
@@ -114,7 +114,7 @@ const ConfigProvider: React.FC = () => {
       .catch((e) => {
         console.warn(
           `Error fetching remote configuration for room "${parsedQs.r}":`,
-          e.message
+          e.message,
         )
         setInitialConfig(getLocalConfig(parsedQs))
       })
@@ -122,15 +122,12 @@ const ConfigProvider: React.FC = () => {
 
   const handleShuffle = useCallback(
     (arr: ConfigOptions['availableCards']) =>
-      process.env.NODE_ENV === 'development' && parsedQs.noShuffle
-        ? arr
-        : arrayShuffle(arr),
-    []
+      import.meta.env.DEV && parsedQs.noShuffle ? arr : arrayToShuffled(arr),
+    [],
   )
 
   const initialIsPlayerTurn =
-    process.env.NODE_ENV === 'development' &&
-    typeof parsedQs.isPlayerTurn !== 'undefined'
+    import.meta.env.DEV && typeof parsedQs.isPlayerTurn !== 'undefined'
       ? Boolean(parsedQs.isPlayerTurn)
       : getRandomTurn()
 

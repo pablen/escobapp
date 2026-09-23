@@ -8,7 +8,7 @@ describe('getLocalConfig', () => {
 
   test('uses the default preset when the requested preset is invalid', () => {
     expect(getLocalConfig({ preset: 'unknown' as 'del10' })).toEqual(
-      presets.del10.options
+      presets.del10.options,
     )
   })
 
@@ -23,7 +23,7 @@ describe('getLocalConfig', () => {
         cardType: 'number',
         pauseOnAiPlay: false,
         hintsDelay: 0,
-      })
+      }),
     ).toEqual({
       targetValue: { numerator: 50, denominator: 1 },
       playerCardsAmount: 2,
@@ -45,12 +45,13 @@ describe('getLocalConfig', () => {
         playerCardsAmount: 0,
         tableCardsAmount: -1,
         availableCards: [0, -1, 10],
-      })
+      }),
     ).toEqual(presets.del10.options)
   })
 
-  test('keeps numeric hint delays, including values supplied directly by URL', () => {
-    expect(getLocalConfig({ hintsDelay: -1 }).hintsDelay).toBe(-1)
+  test('keeps non-negative hint delays and normalizes negative values to zero', () => {
+    expect(getLocalConfig({ hintsDelay: 0 }).hintsDelay).toBe(0)
+    expect(getLocalConfig({ hintsDelay: -1 }).hintsDelay).toBe(0)
   })
 
   test('falls back to the base card counts when an override deck is too small', () => {
@@ -61,7 +62,7 @@ describe('getLocalConfig', () => {
     })
 
     expect(config.playerCardsAmount).toBe(
-      presets.del10.options.playerCardsAmount
+      presets.del10.options.playerCardsAmount,
     )
     expect(config.tableCardsAmount).toBe(presets.del10.options.tableCardsAmount)
     expect(config.availableCards).toEqual(presets.del10.options.availableCards)
@@ -80,7 +81,7 @@ describe('getLocalConfig', () => {
       [1, 2, 3].map((numerator) => ({
         numerator,
         denominator: 1,
-      }))
+      })),
     )
   })
 

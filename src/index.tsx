@@ -1,30 +1,25 @@
-import * as serviceWorker from './serviceWorker'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import React from 'react'
+import { registerSW } from 'virtual:pwa-register'
 
-// Import first so that component styles can override them
-import '@reach/dialog/styles.css'
 import './index.css'
 
 import ConfigProvider from './ConfigProvider'
 
-ReactDOM.render(
+createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <ConfigProvider />
   </React.StrictMode>,
-  document.getElementById('root')
 )
 
-serviceWorker.register({
-  onUpdate: (registration) => {
-    const worker = registration.waiting || registration.installing
-    if (!worker) return
+const updateSW = registerSW({
+  onNeedRefresh() {
     if (
       window.confirm(
-        'Hay una versión nueva de la aplicación. ¿Querés actualizar?'
+        'Hay una versión nueva de la aplicación. ¿Querés actualizar?',
       )
     ) {
-      worker.postMessage({ type: 'SKIP_WAITING' })
+      void updateSW(true)
     }
   },
 })

@@ -1,5 +1,4 @@
-import { AnimateSharedLayout } from 'framer-motion'
-/* eslint-disable react/prop-types */
+import { LayoutGroup } from 'framer-motion'
 import React from 'react'
 
 import { ConfigOptions } from './presets'
@@ -25,7 +24,7 @@ const Game: React.FC<Props> = ({
     console.log(
       '%cInitial configuration',
       'font-weight: bold; color: blue;',
-      initialConfig
+      initialConfig,
     )
   }, [initialConfig])
 
@@ -36,7 +35,7 @@ const Game: React.FC<Props> = ({
       isPlayerTurn: initialIsPlayerTurn,
       config: initialConfig,
     },
-    init
+    init,
   )
   const [isConfigVisible, setIsConfigVisible] = React.useState(false)
   const [isRulesVisible, setIsRulesVisible] = React.useState(showRules)
@@ -71,7 +70,7 @@ const Game: React.FC<Props> = ({
     if (state.config.hintsDelay > 0 && state.isPlayerTurn && hasPlayerCards) {
       timer.current = setTimeout(
         () => dispatch({ type: 'hint requested' }),
-        state.config.hintsDelay * 1000
+        state.config.hintsDelay * 1000,
       )
     } else {
       if (timer.current !== null) clearTimeout(timer.current)
@@ -92,14 +91,14 @@ const Game: React.FC<Props> = ({
     ) {
       setTimeout(
         () => dispatch({ type: 'new cards requested' }),
-        config.aiPlayDelay
+        config.aiPlayDelay,
       )
       return
     }
     if (!state.isPlayerTurn && !isRulesVisible) {
       setTimeout(
         () => dispatch({ type: 'ai play requested' }),
-        config.aiPlayDelay
+        config.aiPlayDelay,
       )
     }
   }, [
@@ -117,7 +116,7 @@ const Game: React.FC<Props> = ({
       'Esperando a que juegue la máquina...'
     ) : state.selectedTableCards.length === 0 ? (
       `La máquina se descarta un ${format(
-        state.shuffledStack[state.selectedAiCard]
+        state.shuffledStack[state.selectedAiCard],
       )}`
     ) : (
       <>
@@ -140,19 +139,19 @@ const Game: React.FC<Props> = ({
 
   const handleConfigClick = React.useCallback(
     () => setIsConfigVisible((s) => !s),
-    []
+    [],
   )
   const handleOkClick = React.useCallback(
     () => dispatch({ type: 'ai play accepted' }),
-    []
+    [],
   )
   const handleTableCardSelected = React.useCallback(
-    (cardId) =>
+    (cardId: number) =>
       dispatch({
         type: 'table card selected',
         payload: cardId,
       }),
-    []
+    [],
   )
   const handlePlayAgain = React.useCallback(
     () =>
@@ -162,26 +161,27 @@ const Game: React.FC<Props> = ({
           shuffledStack: shuffle(state.config.availableCards),
         },
       }),
-    [state.config.availableCards, shuffle]
+    [state.config.availableCards, shuffle],
   )
   const handlePlayerCardSelected = React.useCallback(
-    (cardId) => dispatch({ type: 'player card selected', payload: cardId }),
-    []
+    (cardId: number) =>
+      dispatch({ type: 'player card selected', payload: cardId }),
+    [],
   )
   const handlePlayOrDiscard = React.useCallback(
     () =>
       dispatch({
         type: canPlay ? 'play attempted' : 'player card discarded',
       }),
-    [canPlay]
+    [canPlay],
   )
   const handleRulesDialogClose = React.useCallback(
     () => setIsRulesVisible(false),
-    []
+    [],
   )
   const handleConfigFormClose = React.useCallback(
     () => setIsConfigVisible(false),
-    []
+    [],
   )
   const handleConfigUpdated = React.useCallback(
     (newConfig: ConfigOptions) =>
@@ -192,7 +192,7 @@ const Game: React.FC<Props> = ({
           newConfig,
         },
       }),
-    [shuffle]
+    [shuffle],
   )
 
   return (
@@ -206,7 +206,7 @@ const Game: React.FC<Props> = ({
         <span className="visuallyHidden">Configuración</span>⚙️
       </button>
 
-      <AnimateSharedLayout>
+      <LayoutGroup>
         <section className={styles.aiSection}>
           <div className={styles.aiCards} data-testid="aiCards">
             {state.aiCards.map((card) => (
@@ -281,8 +281,8 @@ const Game: React.FC<Props> = ({
                 {playerPoints > aiPoints
                   ? '🏆 ¡Ganaste! 🏆'
                   : playerPoints < aiPoints
-                  ? 'Perdiste'
-                  : 'Empate'}
+                    ? 'Perdiste'
+                    : 'Empate'}
               </div>
               <ScoreBoard
                 playerStackLength={state.playerStack.length}
@@ -343,7 +343,7 @@ const Game: React.FC<Props> = ({
             </Btn>
           )}
         </section>
-      </AnimateSharedLayout>
+      </LayoutGroup>
 
       {isRulesVisible && (
         <RulesDialog
@@ -368,7 +368,7 @@ type Props = {
   initialConfig: ConfigOptions
   showRules: boolean
   shuffle: (
-    cards: ConfigOptions['availableCards']
+    cards: ConfigOptions['availableCards'],
   ) => ConfigOptions['availableCards']
 }
 
