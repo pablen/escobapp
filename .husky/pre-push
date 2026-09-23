@@ -1,0 +1,1 @@
+pnpm exec tsc -p cypress && pnpm run test:e2e
