@@ -35,7 +35,7 @@ const FractionCardFront: React.FC<{
     >
       {value.numerator}
     </text>
-    <line x1="15" x2="47" y1="45" y2="45" stroke="currentColor" />
+    <line x1="15" x2="47" y1="45" y2="45" stroke="black" />
     <text
       textAnchor="middle"
       fontFamily="sans-serif"
