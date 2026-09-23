@@ -46,14 +46,15 @@ $ fnm use
 Instalar las dependencias y levantar la aplicación:
 
 ```
-$ npm ci
-$ npm start
+$ corepack enable
+$ pnpm install --frozen-lockfile
+$ pnpm start
 ```
 
 ## Correr tests unitarios
 
 ```
-$ npm run test
+$ pnpm test
 ```
 
 ## Correr tests end-to-end
@@ -61,15 +62,21 @@ $ npm run test
 La suite inicia la aplicación y ejecuta Cypress automáticamente:
 
 ```
-$ npm run test:e2e
+$ pnpm run test:e2e
 ```
 
-Para correr Cypress de manera interactiva, primero iniciar la aplicación en otra terminal y verificar que la URL coincida con `baseUrl` en `cypress.json`:
+Para correr Cypress de manera interactiva, primero iniciar la aplicación en otra terminal y verificar que la URL coincida con `baseUrl` en `cypress.config.ts`:
 
 ```
-$ npm start
-$ npm run cypress
+$ pnpm start
+$ pnpm run cypress
 ```
+
+## Variables de entorno
+
+Vite expone al navegador únicamente variables que comienzan con `VITE_`.
+Para configurar una sala de Firebase o habilitar opciones de depuración, usar
+`VITE_FIREBASE_PROJECT_NAME` y `VITE_DEBUG` respectivamente.
 
 ## LICENCIA
 
