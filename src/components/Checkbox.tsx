@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react'
-import PropTypes from 'prop-types'
 
 import styles from './Checkbox.module.css'
 
@@ -11,9 +10,10 @@ const Checkbox: React.FC<Props> = ({
   mb,
   ...other
 }) => {
-  const handleChange = useCallback((e) => onChange(e.target.checked), [
-    onChange,
-  ])
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.checked),
+    [onChange],
+  )
 
   const inlineStyles = {
     style: {
@@ -42,24 +42,14 @@ const Checkbox: React.FC<Props> = ({
   )
 }
 
-const CheckboxPropTypes = {
-  labelProps: PropTypes.shape({
-    className: PropTypes.string,
-  }),
-  children: PropTypes.node.isRequired,
-  onChange: PropTypes.func.isRequired,
-  checked: PropTypes.bool.isRequired,
-  mt: PropTypes.string,
-  mb: PropTypes.string,
-}
-
-Checkbox.propTypes = CheckboxPropTypes
-
 type Props = Omit<
-  PropTypes.InferProps<typeof CheckboxPropTypes> &
-    React.PropsWithoutRef<JSX.IntrinsicElements['input']>,
-  'onChange'
+  React.ComponentPropsWithoutRef<'input'>,
+  'children' | 'onChange' | 'type'
 > & {
+  children: React.ReactNode
+  labelProps?: React.ComponentPropsWithoutRef<'label'>
+  mb?: string
+  mt?: string
   onChange: (checked: boolean) => void
 }
 

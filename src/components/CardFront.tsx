@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types'
 import React from 'react'
 
 const CardFront: React.FC<Props> = ({ value, type, ...other }) => (
@@ -350,14 +349,9 @@ const CardFront: React.FC<Props> = ({ value, type, ...other }) => (
   </svg>
 )
 
-const CardFrontPropTypes = {
-  value: PropTypes.number.isRequired,
-  type: PropTypes.oneOf<'number' | 'image'>(['number', 'image']),
+type Props = React.ComponentPropsWithoutRef<'svg'> & {
+  type?: 'number' | 'image'
+  value: number
 }
-
-CardFront.propTypes = CardFrontPropTypes
-
-type Props = PropTypes.InferProps<typeof CardFrontPropTypes> &
-  React.PropsWithoutRef<JSX.IntrinsicElements['svg']>
 
 export default CardFront

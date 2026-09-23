@@ -1,25 +1,7 @@
-[data-reach-dialog-overlay] {
-  background: rgba(0, 0, 0, 0.5);
-}
-
-.container {
-  background-color: transparent;
-  padding: 0.5rem;
-  width: auto;
-}
-
 @media (min-width: 400px) {
   .container {
     max-width: 400px;
   }
-}
-
-.wrapper {
-  border-radius: 0.5rem;
-  background-color: rgb(83, 140, 83);
-  box-shadow: 0 1rem 2rem -1rem #222;
-  margin: 0 auto;
-  padding: 1rem;
 }
 
 @media (min-width: 400px) {
@@ -28,18 +10,9 @@
   }
 }
 
-.title {
-  color: var(--color-copy);
-  font-weight: bold;
-  text-transform: uppercase;
-  font-size: 1em;
-  letter-spacing: 2px;
-  margin: 0 0 1em;
-}
-
 @media (min-width: 400px) {
   .title {
-    margin-bottom: 0 0 2em;
+    margin-bottom: 2em;
   }
 }
 

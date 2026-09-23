@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types'
 import React from 'react'
 
 import { FractionValue } from '../fractions'
@@ -48,13 +47,5 @@ const FractionCardFront: React.FC<{
     </text>
   </svg>
 )
-
-FractionCardFront.propTypes = {
-  value: PropTypes.shape({
-    numerator: PropTypes.number.isRequired,
-    denominator: PropTypes.number.isRequired,
-  }).isRequired,
-  className: PropTypes.string,
-}
 
 export default FractionCardFront

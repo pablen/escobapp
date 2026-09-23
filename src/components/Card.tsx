@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react'
 import { motion } from 'framer-motion'
-import PropTypes from 'prop-types'
 
 import { CardIndex } from '../utils'
 import CardFront from './CardFront'
@@ -42,7 +41,7 @@ const Card: React.FC<Props> = ({
   )
 
   const handleClick = useCallback(() => {
-    onClick && onClick(id)
+    if (onClick) onClick(id)
   }, [onClick, id])
 
   return onClick ? (
@@ -70,24 +69,14 @@ const Card: React.FC<Props> = ({
   )
 }
 
-const CardPropTypes = {
-  isReversed: PropTypes.bool,
-  isSelected: PropTypes.bool,
-  isDisabled: PropTypes.bool,
-  isHinted: PropTypes.bool,
-  onClick: PropTypes.func,
-  value: PropTypes.any.isRequired,
-  type: PropTypes.oneOf<'number' | 'image'>(['number', 'image']),
-  id: PropTypes.number.isRequired,
-}
-
-Card.propTypes = CardPropTypes
-
-type Props = Omit<
-  PropTypes.InferProps<typeof CardPropTypes>,
-  'onClick' | 'value'
-> & {
+type Props = {
+  id: CardIndex
+  isDisabled?: boolean
+  isHinted?: boolean
+  isReversed?: boolean
+  isSelected?: boolean
   onClick?: (id: CardIndex) => void
+  type?: 'number' | 'image'
   value: FractionInput
 }
 

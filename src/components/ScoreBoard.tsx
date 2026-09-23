@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types'
 import React from 'react'
 
 import styles from './ScoreBoard.module.css'
@@ -63,17 +62,13 @@ const ScoreBoard: React.FC<Props> = ({
   </table>
 )
 
-const ScoreBoardPropTypes = {
-  playerStackLength: PropTypes.number.isRequired,
-  aiStackLength: PropTypes.number.isRequired,
-  playerSweeps: PropTypes.number.isRequired,
-  playerPoints: PropTypes.number.isRequired,
-  aiPoints: PropTypes.number.isRequired,
-  aiSweeps: PropTypes.number.isRequired,
+type Props = {
+  aiPoints: number
+  aiStackLength: number
+  aiSweeps: number
+  playerPoints: number
+  playerStackLength: number
+  playerSweeps: number
 }
-
-ScoreBoard.propTypes = ScoreBoardPropTypes
-
-type Props = PropTypes.InferProps<typeof ScoreBoardPropTypes>
 
 export default ScoreBoard

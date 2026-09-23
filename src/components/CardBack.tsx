@@ -48,6 +48,6 @@ const CardBack: React.FC<Props> = ({ ...props }) => (
   </svg>
 )
 
-type Props = React.PropsWithoutRef<JSX.IntrinsicElements['svg']>
+type Props = React.PropsWithoutRef<React.JSX.IntrinsicElements['svg']>
 
 export default CardBack

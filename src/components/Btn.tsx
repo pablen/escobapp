@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types'
 import React from 'react'
 
 import styles from './Btn.module.css'
@@ -26,21 +25,9 @@ const Btn: React.FC<Props> = ({
   </button>
 )
 
-const BtnPropTypes = {
-  className: PropTypes.string,
-  children: PropTypes.node.isRequired,
-  small: PropTypes.bool,
-  type: PropTypes.oneOf<'button' | 'submit' | 'reset'>([
-    'button',
-    'submit',
-    'reset',
-  ]),
-  text: PropTypes.bool,
+type Props = React.ComponentPropsWithoutRef<'button'> & {
+  small?: boolean
+  text?: boolean
 }
-
-Btn.propTypes = BtnPropTypes
-
-type Props = PropTypes.InferProps<typeof BtnPropTypes> &
-  React.PropsWithoutRef<JSX.IntrinsicElements['button']>
 
 export default Btn

@@ -1,19 +1,8 @@
 import combinations from 'combinations'
-import PropTypes from 'prop-types'
 import { compare, equals, FractionInput, subtract, sum } from './fractions'
 
 /** The card index in shuffledStack. It serves the purpose of a card ID. */
 export type CardIndex = number
-
-export const configPropTypes = PropTypes.shape({
-  playerCardsAmount: PropTypes.number.isRequired,
-  tableCardsAmount: PropTypes.number.isRequired,
-  availableCards: PropTypes.arrayOf(PropTypes.any.isRequired).isRequired,
-  pauseOnAiPlay: PropTypes.bool.isRequired,
-  targetValue: PropTypes.any.isRequired,
-  hintsDelay: PropTypes.number.isRequired,
-  cardType: PropTypes.oneOf<'image' | 'number'>(['image', 'number']).isRequired,
-})
 
 export function getRandomTurn(): boolean {
   return Math.random() >= 0.5
@@ -29,20 +18,20 @@ export function getBestPlay(
   playerCards: CardIndex[],
   tableCards: CardIndex[],
   stack: FractionInput[],
-  targetValue: FractionInput
+  targetValue: FractionInput,
 ): CardIndex[] {
   const sortedCombinations = combinations(tableCards).sort(
-    (a, b) => b.length - a.length
+    (a, b) => b.length - a.length,
   )
 
   for (let i = 0; i < sortedCombinations.length; i++) {
     const requiredCardValue = subtract(
       targetValue,
-      sum(sortedCombinations[i].map((index) => stack[index]))
+      sum(sortedCombinations[i].map((index) => stack[index])),
     )
 
     const requiredCard = playerCards.find((stackIndex) =>
-      equals(stack[stackIndex], requiredCardValue)
+      equals(stack[stackIndex], requiredCardValue),
     )
 
     if (requiredCard !== undefined) {
@@ -55,8 +44,8 @@ export function getBestPlay(
       (stackIndex) =>
         compare(stack[stackIndex], stack[playerCards[0]]) >= 0 &&
         playerCards.every(
-          (candidate) => compare(stack[stackIndex], stack[candidate]) >= 0
-        )
+          (candidate) => compare(stack[stackIndex], stack[candidate]) >= 0,
+        ),
     ) as number,
   ]
 }

@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react'
-import PropTypes from 'prop-types'
 
 import styles from './Input.module.css'
 
@@ -9,14 +8,9 @@ export const Label: React.FC<LabelProps> = ({ children, ...other }) => (
   </label>
 )
 
-const LabelPropTypes = {
-  children: PropTypes.node.isRequired,
+type LabelProps = React.ComponentPropsWithoutRef<'label'> & {
+  children: React.ReactNode
 }
-
-Label.propTypes = LabelPropTypes
-
-type LabelProps = PropTypes.InferProps<typeof LabelPropTypes> &
-  React.PropsWithoutRef<JSX.IntrinsicElements['label']>
 
 const Input: React.FC<Props> = (props) => {
   const {
@@ -24,8 +18,8 @@ const Input: React.FC<Props> = (props) => {
     className,
     onChange,
     label,
-    // eslint-disable-next-line react/prop-types
     type,
+    value,
     rows,
     id,
     mt,
@@ -35,18 +29,17 @@ const Input: React.FC<Props> = (props) => {
 
   const handleChange: React.FormEventHandler<HTMLInputElement> = useCallback(
     (ev) => {
-      // eslint-disable-next-line react/prop-types
-      if (props.type === 'number') {
-        props.onChange(
+      if (type === 'number') {
+        onChange(
           isNaN(ev.currentTarget.valueAsNumber)
             ? undefined
-            : ev.currentTarget.valueAsNumber
+            : ev.currentTarget.valueAsNumber,
         )
       } else {
-        props.onChange(ev.currentTarget.value)
+        onChange(ev.currentTarget.value)
       }
     },
-    [props]
+    [onChange, type],
   )
 
   const inlineStyles = {
@@ -71,41 +64,35 @@ const Input: React.FC<Props> = (props) => {
         type,
         rows,
         id,
+        value: value ?? '',
         ...other,
       })}
     </div>
   )
 }
 
-const InputPropTypes = {
-  labelProps: PropTypes.object,
-  className: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
-  label: PropTypes.string.isRequired,
-  // type: PropTypes.oneOf<'text' | 'number'>(['text', 'number']).isRequired,
-  rows: PropTypes.number,
-  id: PropTypes.string.isRequired,
-  mt: PropTypes.string,
-  mb: PropTypes.string,
+type BaseProps = {
+  className?: string
+  id: string
+  label: string
+  labelProps?: React.ComponentPropsWithoutRef<'label'>
+  mb?: string
+  min?: number | string
+  mt?: string
+  required?: boolean
+  rows?: number
 }
-
-Input.propTypes = InputPropTypes
-
-type BaseProps = Omit<
-  PropTypes.InferProps<typeof InputPropTypes> &
-    React.PropsWithoutRef<JSX.IntrinsicElements['textarea']> &
-    React.PropsWithoutRef<JSX.IntrinsicElements['input']>,
-  'onChange'
->
 
 interface TextProps extends BaseProps {
   type: 'text'
   onChange: (v: string) => void
+  value: string
 }
 
 interface NumberProps extends BaseProps {
   type: 'number'
   onChange: (v?: number) => void
+  value?: number
 }
 
 type Props = TextProps | NumberProps
