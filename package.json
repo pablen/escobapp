@@ -28,6 +28,7 @@
     "start:e2e": "vite --host 127.0.0.1 --port 3001 --strictPort",
     "build": "tsc --noEmit && vite build",
     "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "cypress": "cypress open",
     "cypress:headless": "cypress run",
     "cypress:e2e": "cypress run --config baseUrl=http://127.0.0.1:3001",
@@ -53,6 +54,7 @@
     "@types/react-dom": "19.3.0",
     "@typescript-eslint/parser": "8.70.1",
     "@vitejs/plugin-react": "6.1.1",
+    "@vitest/coverage-v8": "5.0.1",
     "cypress": "16.1.0",
     "eslint": "9.39.5",
     "eslint-config-prettier": "10.1.8",
@@ -75,6 +77,8 @@
     "vitest": "5.0.1"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["cypress"]
+    "onlyBuiltDependencies": [
+      "cypress"
+    ]
   }
 }

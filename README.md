@@ -57,6 +57,12 @@ $ pnpm start
 $ pnpm test
 ```
 
+Para ejecutar los unitarios y generar el reporte de cobertura:
+
+```
+$ pnpm run test:coverage
+```
+
 ## Correr tests end-to-end
 
 La suite inicia la aplicación y ejecuta Cypress automáticamente:

@@ -11,6 +11,7 @@ Use Node.js 24 (`fnm use`), enable Corepack, and install the locked dependency t
 - `pnpm start` runs the development server at `http://localhost:3000`.
 - `pnpm run build` type-checks and creates the production bundle in `dist/`.
 - `pnpm test` runs the Vitest/React Testing Library suite once.
+- `pnpm run test:coverage` runs the suite with the V8 coverage report and conservative CI thresholds.
 - `pnpm run test:e2e` starts the app and runs Cypress headlessly.
 - `pnpm run cypress` opens Cypress interactively; start the app separately first.
 
@@ -20,7 +21,7 @@ Use two-space indentation, TypeScript strictness, single quotes, and no semicolo
 
 ## Testing Guidelines
 
-Add unit tests next to the code they cover, using React Testing Library and Vitest assertions for rendered behavior and utilities/state. Add user-flow coverage to `cypress/integration/` when behavior crosses routes or browser interactions. Keep tests deterministic and run both `pnpm test` and `pnpm run test:e2e` before submitting changes.
+Add unit tests next to the code they cover, using React Testing Library and Vitest assertions for rendered behavior and utilities/state. Add user-flow coverage to `cypress/integration/` when behavior crosses routes or browser interactions. Keep tests deterministic and run `pnpm run test:coverage` and `pnpm run test:e2e` before submitting changes.
 
 ## Commit & Pull Request Guidelines
 

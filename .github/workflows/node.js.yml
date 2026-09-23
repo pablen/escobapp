@@ -25,6 +25,6 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm run build
       - run: pnpm run verify:pwa
-      - run: pnpm test
+      - run: pnpm run test:coverage
       - run: pnpm run test:e2e
       - run: pnpm audit --audit-level high
