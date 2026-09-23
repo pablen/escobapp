@@ -1,18 +1,19 @@
 import { fireEvent, render } from '@testing-library/react'
 import React from 'react'
+import { vi } from 'vitest'
 
 import presets from '../presets'
 import ConfigForm from './ConfigForm'
 
 function renderForm() {
-  const onClose = jest.fn()
-  const onSubmit = jest.fn()
+  const onClose = vi.fn()
+  const onSubmit = vi.fn()
   const result = render(
     <ConfigForm
       currentConfig={presets.del10.options}
       onClose={onClose}
       onSubmit={onSubmit}
-    />
+    />,
   )
 
   return { ...result, onClose, onSubmit }
@@ -22,7 +23,7 @@ test('loads a preset and submits its options', () => {
   const { baseElement, onClose, onSubmit } = renderForm()
 
   fireEvent.click(
-    baseElement.querySelector('[data-preset-id="del100"]') as Element
+    baseElement.querySelector('[data-preset-id="del100"]') as Element,
   )
   fireEvent.submit(baseElement.querySelector('form') as HTMLFormElement)
 
@@ -91,6 +92,6 @@ test('accepts mixed integer and fraction card values', () => {
         { numerator: 2, denominator: 4 },
         { numerator: 1, denominator: 3 },
       ],
-    })
+    }),
   )
 })
